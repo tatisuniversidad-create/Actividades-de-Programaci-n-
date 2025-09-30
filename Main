@@ -1,0 +1,18 @@
+//Tatiana Ramirez y Estean Peña 
+public class Main {
+    public static void main(String[] args) {
+        HeladoManager heladoManager = new HeladoManager();
+        MalteadaManager malteadaManager = new MalteadaManager();
+        ToppingManager toppingManager = new ToppingManager();
+        HeladeriaManager heladeriaManager = new HeladeriaManager();
+
+        Menus menuPpal = new Menus(40, '*', '1');
+        ArrayList<String> options = new ArrayList<String>();
+        options.add("Administrar heladerías");
+        options.add("Administrar helados");
+        options.add("Administrar malteadas");
+        options.add("Administrar toppings");
+        options.add("Terminar");
+        menuPpal.createMenu(options, false);
+    }
+}
