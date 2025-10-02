@@ -1,0 +1,168 @@
+////Tatiana Ramirez Y Esteban Peña 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.InputMismatchException; // Para manejar errores de entrada
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        HeladoManager heladoManager = new HeladoManager();
+        MalteadaManager malteadaManager = new MalteadaManager();
+        ToppingManager toppingManager = new ToppingManager();
+        Scanner scanner = new Scanner(System.in);
+
+        int opcionPrincipal;
+        do {
+            System.out.println("\n--- Menú Principal de Gestión ---");
+            System.out.println("1. Gestionar Helados");
+            System.out.println("2. Gestionar Malteadas");
+            System.out.println("3. Gestionar Toppings");
+            System.out.println("0. Salir");
+            System.out.print("Ingrese su opción: ");
+
+            try {
+                opcionPrincipal = scanner.nextInt();
+                scanner.nextLine(); // Consumir el salto de línea
+            } catch (InputMismatchException e) {
+                System.out.println("Entrada inválida. Por favor, ingrese un número.");
+                scanner.nextLine(); // Limpiar la entrada inválida
+                opcionPrincipal = -1; // Para que el bucle continúe
+                continue;
+            }
+
+
+            switch (opcionPrincipal) {
+                case 1:
+                    gestionarHelados(heladoManager, scanner);
+                    break;
+                case 2:
+                    gestionarMalteadas(malteadaManager, scanner);
+                    break;
+                case 3:
+                    gestionarToppings(toppingManager, scanner);
+                    break;
+                case 0:
+                    System.out.println("Saliendo del programa. ¡Hasta luego!");
+                    break;
+                default:
+                    System.out.println("Opción no válida. Por favor, intente de nuevo.");
+            }
+        } while (opcionPrincipal != 0);
+
+        scanner.close();
+    }
+
+    // --- Métodos para gestionar cada tipo de producto ---
+
+    private static void gestionarHelados(HeladoManager manager, Scanner scanner) {
+        int opcion;
+        do {
+            System.out.println("\n--- Gestión de Helados ---");
+            System.out.println("1. Agregar Helado");
+            System.out.println("2. Editar Helado");
+            System.out.println("3. Eliminar Helado");
+            System.out.println("4. Listar Todos los Helados");
+            System.out.println("5. Buscar Helado por ID");
+            System.out.println("0. Volver al Menú Principal");
+            System.out.print("Ingrese su opción: ");
+
+            try {
+                opcion = scanner.nextInt();
+                scanner.nextLine();
+            } catch (InputMismatchException e) {
+                System.out.println("Entrada inválida. Por favor, ingrese un número.");
+                scanner.nextLine();
+                opcion = -1;
+                continue;
+            }
+
+            switch (opcion) {
+                case 1: // Agregar Helado
+                    System.out.print("Ingrese ID del helado: ");
+                    int idAgregarH = scanner.nextInt();
+                    scanner.nextLine();
+
+                    if (manager.buscarHeladoPorId(idAgregarH) != null) {
+                        System.out.println("Error: Ya existe un helado con ese ID. Por favor, use otro.");
+                        break;
+                    }
+
+                    System.out.print("Ingrese precio del helado: ");
+                    float precioAgregarH = scanner.nextFloat();
+                    scanner.nextLine();
+
+                    System.out.print("Ingrese los sabores (separados por comas, ej: Vainilla,Chocolate): ");
+                    String saboresStrH = scanner.nextLine();
+                    ArrayList<String> saboresAgregarH = new ArrayList<>(Arrays.asList(saboresStrH.split(",")));
+
+                    System.out.print("Ingrese tipo del helado (1: Cono, 2: Vaso, 3: Tarrina): ");
+                    int tipoAgregarH = scanner.nextInt();
+                    scanner.nextLine();
+
+                    Helado nuevoHelado = new Helado(idAgregarH, precioAgregarH, saboresAgregarH, tipoAgregarH);
+                    manager.agregarHelado(nuevoHelado);
+                    System.out.println("Helado agregado exitosamente.");
+                    break;
+
+                case 2: // Editar Helado
+                    System.out.print("Ingrese el ID del helado a editar: ");
+                    int idEditarH = scanner.nextInt();
+                    scanner.nextLine();
+
+                    Helado heladoAEditar = manager.buscarHeladoPorId(idEditarH);
+                    if (heladoAEditar != null) {
+                        System.out.println("Helado encontrado: " + heladoAEditar);
+                        System.out.print("Ingrese nuevo precio (" + heladoAEditar.getPrecio() + "): ");
+                        float nuevoPrecioH = scanner.nextFloat();
+                        scanner.nextLine();
+
+                        System.out.print("Ingrese nuevos sabores (separados por comas, ej: " + String.join(",", heladoAEditar.getSabores()) + "): ");
+                        String nuevosSaboresStrH = scanner.nextLine();
+                        ArrayList<String> nuevosSaboresH = new ArrayList<>(Arrays.asList(nuevosSaboresStrH.split(",")));
+
+                        System.out.print("Ingrese nuevo tipo (1: Cono, 2: Vaso, 3: Tarrina) (" + heladoAEditar.getTipo() + "): ");
+                        int nuevoTipoH = scanner.nextInt();
+                        scanner.nextLine();
+
+                        manager.editarHelado(idEditarH, nuevoPrecioH, nuevosSaboresH, nuevoTipoH);
+                        System.out.println("Helado editado exitosamente.");
+                    } else {
+                        System.out.println("Error: Helado con ID " + idEditarH + " no encontrado.");
+                    }
+                    break;
+
+                case 3: // Eliminar Helado
+                    System.out.print("Ingrese el ID del helado a eliminar: ");
+                    int idEliminarH = scanner.nextInt();
+                    scanner.nextLine();
+
+                    manager.eliminarHelado(idEliminarH); // El manager ya imprime el mensaje
+                    break;
+
+                case 4: // Listar Helados
+                    System.out.println("\n--- Listado de Helados ---");
+                    ArrayList<Helado> helados = manager.getListaHelados();
+                    if (helados.isEmpty()) {
+                        System.out.println("No hay helados registrados.");
+                    } else {
+                        for (Helado h : helados) {
+                            System.out.println(h);
+                        }
+                    }
+                    break;
+
+                case 5: // Buscar Helado por ID
+                    System.out.print("Ingrese el ID del helado a buscar: ");
+                    int idBuscarH = scanner.nextInt();
+                    scanner.nextLine();
+
+                    Helado heladoBuscado = manager.buscarHeladoPorId(idBuscarH);
+                    if (heladoBuscado != null) {
+                        System.out.println("Helado encontrado: " + heladoBuscado);
+                    } else {
+                        System.out.println("Helado con ID " + idBuscarH + " no encontrado.");
+                    }
+                    break;
+
+                case 0: // Volver al Menú Principal
+                    System.out.println("Volviendo al menú principal...");
