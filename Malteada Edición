@@ -1,0 +1,52 @@
+//Tatiana Ramirez Y Esteban Peña 
+import java.util.ArrayList;
+
+public class MalteadaManager {
+    private ArrayList<Malteada> listaMalteadas;
+
+    public MalteadaManager() {
+        this.listaMalteadas = new ArrayList<>();
+    }
+
+    // CRUD
+    public void agregarMalteada(Malteada m) {
+        this.listaMalteadas.add(m);
+    }
+
+    public Malteada buscarMalteadaPorId(int id) {
+        for (Malteada m : listaMalteadas) {
+            if (m.id == id) { // Accede directamente a 'id' que es público en Malteada
+                return m;
+            }
+        }
+        return null;
+    }
+
+    // Nuevo método para editar Malteadas
+    public void editarMalteada(int id, String nuevoSaborBase, ArrayList<String> nuevosIngredientesAdicionales, float nuevoPrecio, int nuevoTamano) {
+        Malteada m = buscarMalteadaPorId(id);
+        if (m != null) {
+            m.setSaborBase(nuevoSaborBase);
+            m.setIngredientesAdicionales(nuevosIngredientesAdicionales);
+            m.setPrecio(nuevoPrecio);
+            m.setTamano(nuevoTamano);
+            System.out.println("Malteada con ID " + id + " editada exitosamente.");
+        } else {
+            System.out.println("Error: No se encontró una malteada con ID " + id + " para editar.");
+        }
+    }
+
+    public void eliminarMalteada(int id) {
+        Malteada m = buscarMalteadaPorId(id);
+        if (m != null) {
+            listaMalteadas.remove(m);
+            System.out.println("Malteada con ID " + id + " eliminada exitosamente.");
+        } else {
+            System.out.println("Error: No se encontró una malteada con ID " + id + " para eliminar.");
+        }
+    }
+
+    public ArrayList<Malteada> getListaMalteadas() {
+        return listaMalteadas;
+    }
+}
