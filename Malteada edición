@@ -1,0 +1,55 @@
+//Tatiana Ramirez Y Esteban Peña 
+import java.util.ArrayList;
+
+public class ToppingManager {
+    private ArrayList<String> listaToppings;
+
+    public ToppingManager() {
+        this.listaToppings = new ArrayList<>();
+    }
+
+    // CRUD
+    public void agregarTopping(String topping) {
+        // Opcional: Evitar duplicados si cada topping debe ser único
+        if (!listaToppings.contains(topping)) {
+            this.listaToppings.add(topping);
+            System.out.println("Topping '" + topping + "' agregado exitosamente.");
+        } else {
+            System.out.println("El topping '" + topping + "' ya existe.");
+        }
+    }
+
+    // Método para editar un topping
+    // Recibe el nombre actual del topping y el nuevo nombre
+    public void editarTopping(String toppingActual, String nuevoTopping) {
+        int index = listaToppings.indexOf(toppingActual); // Busca la posición del topping actual
+        if (index != -1) { // Si el topping se encuentra en la lista
+            // Opcional: Verificar si el nuevo topping ya existe para evitar duplicados
+            if (listaToppings.contains(nuevoTopping) && !toppingActual.equals(nuevoTopping)) {
+                System.out.println("Error: El topping '" + nuevoTopping + "' ya existe. No se pudo editar.");
+            } else {
+                listaToppings.set(index, nuevoTopping); // Reemplaza el topping en esa posición
+                System.out.println("Topping '" + toppingActual + "' editado a '" + nuevoTopping + "' exitosamente.");
+            }
+        } else {
+            System.out.println("Error: El topping '" + toppingActual + "' no se encontró para editar.");
+        }
+    }
+
+    public void eliminarTopping(String topping) {
+        if (listaToppings.remove(topping)) { // remove() devuelve true si el elemento fue encontrado y eliminado
+            System.out.println("Topping '" + topping + "' eliminado exitosamente.");
+        } else {
+            System.out.println("Error: El topping '" + topping + "' no se encontró para eliminar.");
+        }
+    }
+
+    public ArrayList<String> getListaToppings() {
+        return this.listaToppings;
+    }
+
+    // Método adicional para buscar si un topping existe
+    public boolean existeTopping(String topping) {
+        return listaToppings.contains(topping);
+    }
+}
